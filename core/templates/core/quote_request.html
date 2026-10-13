@@ -1,0 +1,44 @@
+{% extends "core/base.html" %}
+{% block title %}Get a Quote | {{ package.name }} | Nkript{% endblock %}
+{% block content %}
+<section class="page-hero wrap"><p class="eyebrow">PROJECT QUOTATION</p><h1>Let's scope your<br><span>{{ package.name }}.</span></h1><p>{{ package.short_description }}</p></section>
+<section class="section wrap form-layout">
+  <div class="form-panel">
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="error">{{ form.non_field_errors }}</div>{% endif %}
+      <div class="field-grid">
+      {% for field in form %}
+        <div class="field {% if field.name == 'requirements' %}wide{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}</div>
+      {% endfor %}
+      </div>
+      <h3>Optional add-ons</h3>
+      <div class="addon-list">
+      {% for feature in selectable_features %}
+        <label class="addon"><input type="checkbox" name="features" value="{{ feature.id }}" data-price="{{ feature.additional_price }}"><span>{{ feature.name }}</span><strong>{% if feature.additional_price %}+ ₹{{ feature.additional_price|floatformat:0 }}{% else %}Included{% endif %}</strong></label>
+      {% empty %}<p>No optional add-ons configured.</p>{% endfor %}
+      </div>
+      <div class="estimate-box"><span>Estimated total (before final review)</span><strong id="estimate">₹{{ package.min_price|floatformat:0 }}</strong><small>Final scope and pricing will be confirmed by Nkript.</small></div>
+      <button class="button primary full" type="submit">Submit quotation request ↗</button>
+    </form>
+  </div>
+  <aside class="quote-summary"><p class="eyebrow">YOUR PACKAGE</p><h2>{{ package.name }}</h2><p>{{ package.category.name }}</p><div class="price-range"><strong>₹{{ package.min_price|floatformat:0 }}</strong><span>to</span><strong>₹{{ package.max_price|floatformat:0 }}</strong></div><hr><h3>Included features</h3><ul class="feature-list">{% for feature in features %}{% if feature.included_in_min or feature.included_in_max %}<li>✓ {{ feature.name }}</li>{% endif %}{% endfor %}</ul></aside>
+</section>
+<script>
+(() => {
+  const minPrice = Number("{{ package.min_price }}");
+  const maxPrice = Number("{{ package.max_price }}");
+  const tier = document.getElementById("id_tier");
+  const output = document.getElementById("estimate");
+  const boxes = document.querySelectorAll('input[name="features"]');
+  function update() {
+    const base = tier && tier.value === "max" ? maxPrice : minPrice;
+    const addons = Array.from(boxes).filter(b => b.checked).reduce((sum, b) => sum + Number(b.dataset.price || 0), 0);
+    output.textContent = "₹" + Math.round(base + addons).toLocaleString("en-IN");
+  }
+  if (tier) tier.addEventListener("change", update);
+  boxes.forEach(b => b.addEventListener("change", update));
+  update();
+})();
+</script>
+{% endblock %}

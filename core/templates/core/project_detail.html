@@ -1,0 +1,9 @@
+{% extends "core/base.html" %}
+{% block title %}{{ project.title }} | Nkript{% endblock %}
+{% block content %}
+<section class="page-hero wrap"><p class="eyebrow">{{ project.get_category_display }}</p><h1>{{ project.title }}</h1><p>{{ project.description }}</p>{% if project.live_url %}<a class="button primary" href="{{ project.live_url }}" target="_blank" rel="noopener">Visit live website ↗</a>{% endif %}</section>
+<section class="section wrap screenshot-grid">
+  <img class="main-shot" src="{{ project.image.url }}" alt="{{ project.title }}">
+  {% for shot in project.screenshots.all %}<figure><img src="{{ shot.image.url }}" alt="{{ shot.caption|default:project.title }}" loading="lazy">{% if shot.caption %}<figcaption>{{ shot.caption }}</figcaption>{% endif %}</figure>{% endfor %}
+</section>
+{% endblock %}

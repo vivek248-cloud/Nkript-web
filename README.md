@@ -64,4 +64,3 @@ This bundle is a standalone, complete starter project. If merging into an existi
 
 ## Trichy editorial design & local SEO
 The homepage and portfolio have an editorial, typography-led layout inspired by contemporary design portfolios (not a pixel-for-pixel copy). Page metadata and local SEO copy target Trichy/Tiruchirappalli naturally. Review `LOCAL_SEO_LAUNCH_CHECKLIST.md` before deployment. Replace sample domain and contact details with verified business information.
-"# Nkript-web" 

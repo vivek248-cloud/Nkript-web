@@ -1,0 +1,5 @@
+{% extends "core/base.html" %}
+{% block title %}Request Received | Nkript{% endblock %}
+{% block content %}
+<section class="success-panel wrap"><div class="success-mark">✓</div><p class="eyebrow">REQUEST RECEIVED</p><h1>Thanks. Let's make<br><span>something great.</span></h1><p>Your quotation request has been saved. If email is configured, a confirmation has been sent to you and our team has been notified.</p>{% if quote %}<div class="estimate-box"><span>Request reference</span><strong>#{{ quote.id }}</strong><small>{{ quote.package.name }} · Estimated ₹{{ quote.estimated_total|floatformat:0 }}</small></div>{% endif %}<a class="button primary" href="{% url 'home' %}">Back to home</a></section>
+{% endblock %}

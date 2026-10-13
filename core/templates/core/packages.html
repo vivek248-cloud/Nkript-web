@@ -1,0 +1,23 @@
+{% extends "core/base.html" %}
+{% block title %}Best Website Packages & Pricing | Nkript{% endblock %}
+{% block content %}
+<section class="page-hero wrap"><p class="eyebrow">PACKAGES & PRICING</p><h1>Choose a starting point.<br><span>Make it yours.</span></h1><p>Transparent starting ranges. Every quotation is reviewed against your requirements.</p></section>
+<section class="section wrap">
+{% for category in categories %}
+  <div class="category-block"><div class="section-heading"><div><h2>{{ category.name }}</h2><p>{{ category.description }}</p></div></div>
+  <div class="package-grid">
+    {% for package in category.packages.all %}
+    {% if package.is_active %}
+    <article class="package-card">
+      {% if package.cover_image %}<img class="package-cover" src="{{ package.cover_image.url }}" alt="{{ package.name }}" loading="lazy">{% endif %}
+      <p class="eyebrow">{{ category.name }}</p><h3>{{ package.name }}</h3><p>{{ package.short_description }}</p>
+      <div class="price-range"><strong>₹{{ package.min_price|floatformat:0 }}</strong><span>to</span><strong>₹{{ package.max_price|floatformat:0 }}</strong></div>
+      <ul class="feature-list">{% for feature in package.features.all %}{% if feature.included_in_min or feature.included_in_max %}<li>✓ {{ feature.name }}{% if feature.included_in_min and feature.included_in_max %}<small> · Both tiers</small>{% elif feature.included_in_max %}<small> · Advanced</small>{% else %}<small> · Starter</small>{% endif %}</li>{% endif %}{% endfor %}</ul>
+      <a class="button primary full" href="{% url 'quote_request' package.id %}">Configure & get quote ↗</a>
+    </article>
+    {% endif %}
+    {% empty %}<p>No packages configured for this category yet.</p>{% endfor %}
+  </div></div>
+{% empty %}<div class="empty-state">Add categories and packages in Django Admin to publish your services.</div>{% endfor %}
+</section>
+{% endblock %}

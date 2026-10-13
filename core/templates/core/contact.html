@@ -1,0 +1,6 @@
+{% extends "core/base.html" %}
+{% block title %}Contact Nkript{% endblock %}
+{% block content %}
+<section class="page-hero wrap"><p class="eyebrow">CONTACT</p><h1>Tell us what<br><span>you're building.</span></h1><p>Share your idea and we'll get back to you.</p></section>
+<section id="contact-form" class="section wrap form-layout"><div class="form-panel"><form method="post">{% csrf_token %}<div class="field-grid">{% for field in form %}<div class="field {% if field.name == 'message' %}wide{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}</div>{% endfor %}</div><button class="button primary full" type="submit">Send message ↗</button></form></div><aside class="quote-summary"><p class="eyebrow">LET'S TALK</p><h2>Good projects start with a conversation.</h2><p>Website development · E-commerce · Business software · Digital marketing</p></aside></section>
+{% endblock %}
